@@ -1,0 +1,74 @@
+--Find the most visited destination
+SELECT Destination, NumVisits FROM (
+  SELECT Destination, COUNT(Destination) AS NumVisits
+  FROM BOOKING
+  GROUP BY Destination
+  ORDER BY NumVisits DESC )
+WHERE ROWNUM <= 1;
+
+
+--Find the year with the maximum bookings
+SELECT Year, Bookings FROM
+  (SELECT EXTRACT(YEAR FROM bookingdate) AS Year, COUNT(bookingdate) AS Bookings
+  FROM BOOKING
+  GROUP BY EXTRACT(YEAR FROM bookingdate)
+  ORDER BY Bookings DESC)
+WHERE ROWNUM <= 1;
+
+
+--Find the age of top 5 salesmen in the agency
+SELECT FNAME, LNAME, SID, FLOOR(MONTHS_BETWEEN(SYSDATE,DOB)/12) AS AGE 
+FROM Employee,
+  (SELECT SalespersonID AS SID, COUNT(SalespersonID) AS NUMBOOKINGS
+  FROM BOOKING
+  GROUP BY salespersonid
+  ORDER BY NUMBOOKINGS DESC)
+WHERE ROWNUM <= 5
+AND Employee.EID = SID;
+
+
+--Find the most common mode of transport used by customers
+SELECT Type AS MOST_COMMON_TRANSPORT FROM
+  (SELECT Type, COUNT(TYPE) AS MODECOUNT
+  FROM MODEOFTRANSPORT
+  GROUP BY Type
+  ORDER BY MODECOUNT DESC)
+WHERE ROWNUM <= 1;
+
+
+--Find the names of customers and city they live in who have spent over $10,000
+SELECT Fname, Lname, City 
+FROM Customers,
+  (SELECT CustomerID, SUM(Amount) AS Expense
+  FROM Booking
+  RIGHT OUTER JOIN
+    (SELECT BookingID, PaymentID, Amount
+        FROM PaidBy
+        NATURAL FULL JOIN (SELECT PaymentID, Amount
+            FROM Cash
+            NATURAL FULL JOIN GiftCard)) allpaidbookings
+  ON allpaidbookings.bookingid = booking.id
+  GROUP BY booking.customerid
+  ORDER BY Expense DESC)
+WHERE Expense >= 10000;
+
+
+--Find the details of customers who are senior citizens (age>65)
+SELECT Fname, Lname, ID
+FROM Customers
+WHERE FLOOR(MONTHS_BETWEEN(SYSDATE,DOB)/12) > 65;
+
+
+--Find the salesmen who made a booking within a month of joining
+SELECT Fname, Lname 
+FROM Booking, 
+  (SELECT Fname, Lname, EmployeeID AS EID, DateOfJoining
+    FROM Employee, 
+        (SELECT EMPLOYEEID FROM FloorSalesperson 
+        UNION 
+        SELECT EMPLOYEEID FROM InternetSalesperson) SP
+    WHERE Employee.EID = SP.EMPLOYEEID) Salesperson
+WHERE booking.salespersonid = salesperson.eid
+AND BookingDate BETWEEN DateOfJoining AND Add_months(DateOfJoining, 1);
+
+
