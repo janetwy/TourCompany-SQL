@@ -1,0 +1,433 @@
+-- table creation & tuple entries
+
+------------------ EMPLOYEES
+CREATE TABLE Employee (
+    Fname varchar(16) not null,
+    Minit varchar(1),
+    Lname varchar(16) not null,
+    Eid varchar(4),
+    Salary int not null,
+    DateOfJoining Date not null,
+    Phone int not null,
+    DOB Date not null,
+    Street varchar(32) not null,
+    City varchar(16) not null,
+    Zip int not null,
+    
+    Primary Key(Eid)
+    );
+ 
+Insert into Employee values('John', 'A', 'Smith', 'E012', 40000, '17-AUG-1995', 4999305195, '17-JUN-1978', '100 West Division Street', 'Chicago', 60610);
+Insert into Employee values('Benjamin', 'F', 'Decker', 'E459', 50000, '22-JUN-2016', 5805010188, '05-JUN-1990', '222 Bandera Road', 'San Antonio', 78228);
+Insert into Employee values('Erica', 'K', 'Irons', 'E982', 41000, '20-SEP-2009', 9239689054, '08-JUN-1983', '998 Watercrest Trail', 'Los Angeles', 90014);    
+Insert into Employee values('Nathan', 'S', 'Cooper', 'E234', 13500, '21-JUN-2015', 7363279677, '26-MAY-1990', '344 Olive Street', 'Los Angeles', 90015);
+Insert into Employee values('Victoria', 'T', 'Lawson', 'E563', 26300, '11-JUN-2015', 6673486556, '26-JUN-1990', '108 Pecan Street', 'New York', 10012);
+Insert into Employee values('Alice', 'B', 'Connor', 'E978', 25000, '26-JUN-1970', 2119074042, '09-JUN-1970', '109 Hudson Street', 'New York', 10014);
+Insert into Employee values('Adam', 'T', 'Price', 'E018', 32500, '19-JUN-2013', 6923856733, '03-MAY-1997', '209 Southeastern Trail', 'Los Angeles', 90017);
+Insert into Employee values('Tom', 'C', 'Miles', 'E638', 25000, '16-JUN-2017', 9144784882, '11-JUN-1996', '307 Hummingbird Drive', 'Miami', 75056); 
+
+------------------ RECEPTIONISTS
+CREATE TABLE Receptionist (
+    EmployeeID varchar(4),
+    Fname varchar(16) not null,
+    Minit varchar(1),
+    Lname varchar(16) not null,
+    
+    Primary Key (EmployeeID),
+    Foreign Key (EmployeeID) References Employee(Eid)
+);
+
+Insert into Receptionist values('E459', 'Benjamin', 'F', 'Decker');
+Insert into Receptionist values('E982', 'Erica', 'K', 'Irons');
+
+------------------ FLOOR SALESPERSON
+CREATE TABLE FloorSalesperson(
+    EmployeeID varchar(4),
+    Fname varchar(16) not null,
+    Minit varchar(1),
+    Lname varchar(16) not null,
+    
+    Primary Key (EmployeeID),
+    Foreign Key (EmployeeID) References Employee(Eid)
+);
+
+Insert into FloorSalesperson values('E012', 'John', 'A', 'Smith');
+Insert into FloorSalesperson values('E234', 'Nathan', 'S', 'Cooper');
+
+------------------ INTERNET SALESPERSON
+create table InternetSalesperson (
+    EmployeeID varchar(4),
+    Fname varchar(16) not null,
+    Minit varchar(1),
+    Lname varchar(16) not null,
+    
+    Primary Key (EmployeeID),
+    Foreign Key (EmployeeID) References Employee(Eid)
+);
+
+Insert into internetsalesperson values('E978', 'Alice', 'B', 'Connor');
+
+------------------ MANAGERS
+create table Manager(
+    EmployeeID varchar(4),
+    Fname varchar(16) not null,
+    Minit varchar(1),
+    Lname varchar(16) not null,
+    
+    Primary Key (EmployeeID),
+    Foreign Key (EmployeeID) References Employee(Eid)
+);
+Insert into Manager values('E563', 'Victoria', 'T', 'Lawson');
+Insert into Manager values('E018', 'Adam', 'T', 'Price');
+Insert into Manager values('E638', 'Tom', 'T', 'Miles');
+
+
+
+
+
+
+
+
+-------------------- CUSTOMERS
+create table Customers (
+    ID int,
+    Fname varchar(16) not null,
+    Mname varchar (16),
+    Lname varchar (16) not null,
+    DateOfVisit Date not null,
+    Email varchar(32),
+    PhoneNumber int,
+    Street varchar(32),
+    City varchar(16),
+    Zip int,
+    DOB Date not null,
+
+    primary key (ID)
+);
+
+Insert into Customers values(125879634, 'Michael', 'Abraham', 'Thompson', '20-MAR-2018', 'a.thompson@gmail.com', '5228535224', '789 Cedar Street', 'Springfield', 65802, '07-AUG-2000');
+Insert into Customers values(325489617, 'Sarah', 'Hope', 'Daniels', '12-Apr-2017', 'h.daniels@gmail.com',5980250314, '999 Griffin Drive', 'Los Angeles', 90033, '12-Apr-1999');
+Insert into Customers values(890156324, 'Zack', 'Mitchell', 'Snow', '09-Aug-2016', 'm.snow@gmail.com', 1262786171, '890 Green Lane', 'Chicago', 60607, '29-Sep-2001');
+Insert into Customers values(102654186,'Nick', 'Samuel', 'Halloway', '12-Oct-2018', 's.halloway@gmail.com', 7883855313, '234 Peachtree Street', 'Los Angeles', 90024    ,'4-Feb-1996');
+Insert into Customers values(302548102,'Michelle', 'Rose', 'Stanton', '22-Apr-2016', 'r.stanton@gmail.com', 7391896603, '673 Ramblewood Street', 'Los Angeles', 90009, '27-Jan-1993');
+Insert into Customers values(789548612, 'Alan', 'Cole', 'Winston', '30-Sep-2015', 'c.winston@gmail.com', 7868119880, '290 Jones Avenue', 'Washington', 98001, '8-Jul-1997');
+Insert into Customers values(133587556, 'Barbara', 'Murphy', 'Fields', '10-May-2018', 'm.fields@gmail.com', 3687571534, '927 Bayport Drive', 'Los Angeles', 90004, '21-Nov-1998');
+Insert into Customers values(458996315, 'Tim', 'Johnson', 'Wake', '24-Jun-2017', 'j.wake@gmail.com', 3576227185, '611 East Lake Trail', 'New York', 10033, '18-Sep-2000');
+
+--------------------- BRANCH
+create table Branch(
+    ID int,
+    Name varchar(16) not null unique,
+    Email varchar(32) not null,
+    PhoneNumber int not null,
+    Street varchar(32) not null,
+    City varchar(16) not null,
+    Zipcode int not null,
+    ManagerID varchar(4) not null unique,
+    
+    primary key(ID),
+    foreign key (managerID) references Manager(employeeID)
+);
+
+Insert into Branch values(1011, 'Branch Red', 'ParadiseToursRed@gmail.com', 3102907445, '5000 Reservoir Street', 'Los Angeles', 90026, 'E638');
+Insert into Branch values(1012, 'Branch Yellow', 'ParadiseToursYellow@gmail.com', 3102907446, '5000 Reservoir Street', 'Los Angeles', 90026, 'E563');
+Insert into Branch values(1013, 'Branch Blue', 'ParadiseToursBlue@gmail.com', 3102907447, '5000 Reservoir Street', 'Los Angeles', 90026, 'E018');
+
+----------------------------------- MEMBERSHIP
+create table Member(
+    MemberID int,
+    MembershipLevel int not null,    
+    primary key(MemberID)
+);
+Insert into Member values(325489617, 2);
+Insert into Member values(302548102, 1);
+Insert into Member values(133587556, 2);
+insert into member values(125879634, 1);
+insert into member values(789548612, 3);
+
+------------------------------HOTEL
+create table Hotel(
+    HotelID int,
+    Name varchar(32) not null,
+    Location varchar(32) not null,
+    
+    primary key (HotelID)
+);
+
+Insert into Hotel values(11253, 'Hilton Hotels and Resorts', 'New Orleans, Louisiana');
+Insert into Hotel values(11276, 'Hyatt Regency', 'Miami, Florida');
+Insert into Hotel values(11234, 'Embassy Suites', 'New York, New York');
+
+-------------------PACKAGE TOUR
+create table PackageTour(
+    HotelID int,
+    Destination varchar(32) not null,
+    NumDaysOffered int not null,
+    
+    primary key(HotelID),
+    foreign key(HotelID) references Hotel(HotelID)
+);
+
+Insert into PackageTour values(11253, 'St. Louis, Missouri', 7);
+Insert into PackageTour values(11276, 'Miami, Florida', 7);
+Insert into PackageTour values(11234, 'New York, New York', 10);
+
+-------------------------- BOOKING
+create table Booking(
+    ID int,
+    Destination varchar(32) not null,
+    Departure Date not null,
+    Arrival Date not null,
+    NumIndividuals int not null,
+    BookingDate Date not null,
+    Transportation varchar(16) not null,
+    SalespersonID varchar(4) not null,
+    CustomerID int not null,
+    
+    primary key(ID),
+    foreign key(SalespersonID) references Employee(EID),
+    foreign key(CustomerID) references Customers(ID)
+);
+
+insert into booking values(45879, 'Japan', '3-Dec-2018', '14-Dec-2018', 2, '18-MAY-2018', 'Airplane', 'E012', 133587556);
+insert into booking values(45863, 'Miami', '14-Oct-2017', '21-Oct-2017', 4, '2-Jun-2017', 'Car', 'E234', 325489617);
+insert into booking values(45891, 'Paris', '30-Aug-2015', '7-Sep-2015', 5, '21-May-2015', 'Airplane', 'E012', 302548102);
+insert into booking values(45831, 'New York', '17-Apr-2017', '27-Apr-2017', 3, '25-Mar-2017', 'Airplane', 'E012', 102654186);
+insert into booking values(45876, 'Carribean', '13-Jun-2019', '20-Jun-2019', 8, '16-Apr-2019', 'Car', 'E234', 789548612);
+insert into booking values(45834, 'New York', '19-May-2016', '29-May-2016', 5, '2-Apr-2016', 'Airplane', 'E234', 125879634);
+insert into booking values(45819, 'Miami', '1-Jul-2007', '8-Jul-2007', 3, '19-Mar-2007', 'Car', 'E012', 890156324);
+insert into booking values(45899, 'Miami', '9-Aug-2009', '16-Aug-2009', 7, '18-Jul-2009', 'Airplane', 'E012', 458996315);
+
+-------------------------- PAYMENT
+create table Payment (
+    ID int,
+    Type varchar(9) not null,
+    PayDate date not null,
+    
+    primary key(ID)
+);
+
+Insert into payment values(210345, 'Gift Card', '18-May-2018');
+Insert into payment values(210698, 'Cash', '2-Jun-2017');
+Insert into payment values(210367, 'Cash', '21-May-2015');
+Insert into payment values(210054, 'Gift Card', '25-Mar-2017');
+Insert into payment values(210668, 'Gift Card', '16-Apr-2019');
+Insert into payment values(210684, 'Gift Card', '2-Apr-2016');
+Insert into payment values(210322, 'Gift Card', '18-Jul-2009');
+
+--------------------------- GIFT CARD
+create table GiftCard(
+    PaymentID int,
+    CardID varchar(6) not null unique,
+    Amount int not null,
+    MembershipID int not null,
+    
+    primary key (paymentID),
+    foreign key (paymentID) references Payment(ID)
+);
+
+insert into GiftCard values(210054, 'C98864', 500, 133587556);
+insert into GiftCard values(210345, 'C55687', 750, 125879634);
+insert into GiftCard values(210668, 'C21034', 600, 325489617);
+insert into GiftCard values(210684, 'C59511', 650, 302548102);
+insert into GiftCard values(210322, 'C61002', 650, 789548612);
+
+------------------------------- CASH
+create table Cash( 
+    paymentID int,
+    amount int not null,
+    
+    primary key(paymentID),
+    foreign key (paymentID) references Payment(ID)
+);
+
+insert into cash values(210698, 600);
+insert into cash values(210367, 500);
+insert into cash values(210339, 775);
+
+------------------------------- PROMOTION
+create table Promotion(
+    ID varchar(6),
+    Name varchar (16) not null,
+    Description varchar(32),
+    
+    primary key(ID)
+);
+
+insert into promotion values('P10156', 'Caribbean', 'Take a trip to the Caribbean!');
+insert into promotion values('P10178', 'Beach', 'Enjoy a vacation to the Beach!');
+insert into promotion values('P10149', 'Urban', 'Want to visit the city life?');
+
+-------------------------------- APPLIED TO
+create table AppliedTo(
+    promotionID varchar(6),
+    PackageTour varchar(16) not null,
+    
+    primary key (promotionID),
+    foreign key (promotionID) references Promotion(ID)
+);
+
+insert into appliedto values('P10149', 'Caribbean');
+insert into appliedto values('P10156', 'Miami');
+insert into appliedto values('P10178', 'New York');
+
+-------------------------------- ASSOCIATED WITH
+create table AssociatedWith(
+    bookingID int,
+    PackageTour varchar(16) not null,
+    
+    primary key (bookingID),
+    foreign key (bookingID) references Booking(ID)
+);
+
+insert into associatedwith values(45819, 'Miami');
+insert into associatedwith values(45831, 'New York');
+insert into associatedwith values(45834, 'New York');
+insert into associatedwith values(45863, 'Miami');
+insert into associatedwith values(45876, 'Caribbean');
+insert into associatedwith values(45879, 'Japan');
+insert into associatedwith values(45891, 'Paris');
+insert into associatedwith values(45899, 'Miami');
+
+-------------------------------- WORKS FOR
+create table WorksFor(
+    EID varchar(4),
+    BranchID int not null,
+    
+    primary key(EID),
+    foreign key (EID) references Employee(EID),
+    foreign key (BranchID) references Branch(ID)
+);
+
+insert into worksfor values('E012', 1011);
+insert into worksfor values('E018', 1012);
+insert into worksfor values('E234', 1011);
+insert into worksfor values('E459', 1012);
+insert into worksfor values('E563', 1011);
+insert into worksfor values('E638', 1013);
+insert into worksfor values('E978', 1013);
+insert into worksfor values('E982', 1012);
+
+
+-------------------------------- SERVED BY
+create table ServedBy(
+    CustomerID int,
+    BranchID int not null,
+    
+    primary key(CustomerID),
+    foreign key (CustomerID) references Customers(ID),
+    foreign key (BranchID) references Branch(ID)
+);
+
+insert into servedby values(102654186, 1013);
+insert into servedby values(125879634, 1013);
+insert into servedby values(133587556, 1012);
+insert into servedby values(302548102, 1012);
+insert into servedby values(325489617, 1012);
+insert into servedby values(458996315, 1011);
+insert into servedby values(789548612, 1011);
+insert into servedby values(890156324, 1011);
+
+-------------------------------- PAYS
+create table Pays(
+    CustomerID int,
+    paymentID int not null,
+    
+    primary key(CustomerID),
+    foreign key (CustomerID) references Customers(ID),
+    foreign key (paymentID) references Payment(ID)
+);
+insert into pays values(102654186, 210345);
+insert into pays values(125879634, 210698);
+insert into pays values(133587556, 210367);
+insert into pays values(302548102, 210054);
+insert into pays values(325489617, 210668);
+insert into pays values(458996315, 210684);
+insert into pays values(789548612, 210698);
+insert into pays values(890156324, 210322);
+
+
+-------------------------------- PAID BY
+create table PaidBy(
+    bookingID int,
+    paymentID int not null,
+    
+    primary key (bookingID),
+    foreign key (bookingID) references Booking(ID),
+    foreign key (paymentID) references Payment(ID)
+);
+
+insert into paidby values(45819, 210345);
+insert into paidby values(45831, 210698);
+insert into paidby values(45834, 210367);
+insert into paidby values(45863, 210054);
+insert into paidby values(45876, 210668);
+insert into paidby values(45879, 210684);
+insert into paidby values(45891, 210698);
+insert into paidby values(45899, 210322);
+
+
+--------------------------------- ENTITLED TO
+create table EntitledTo (
+    memberID int,
+    giftcardID varchar(6) not null unique,
+    --amount int not null,
+    
+    primary key(memberID),
+    foreign key (memberID) references member(memberID)
+);
+
+insert into entitledto values(125879634, 'C98864');
+insert into entitledto values(133587556 , 'C55687');
+insert into entitledto values(302548102, 'C21034');
+insert into entitledto values(325489617, 'C59511');
+insert into entitledto values(789548612, 'C61002');
+
+-------------------------------- INCLUDES
+create table Includes(
+    hotelID int,
+    PackageTour varchar(32) not null,
+    
+    primary key (hotelID),
+    foreign key (hotelID) references Hotel(hotelID)
+);
+
+insert into includes values(11234, 'Miami');
+insert into includes values(11253, 'Caribbean');
+insert into includes values(11276, 'New York');
+--------------------------------- OFFERS
+create table Offers(
+    branchID int,
+    promoID varchar(6) not null,
+    PromoYear varchar(4) not null,
+    
+    primary key (branchID),
+    foreign key (branchID) references branch(ID),
+    foreign key (promoID) references Promotion(ID)
+);
+
+insert into offers values(1011, 'P10149', '2019');
+insert into offers values(1012, 'P10178', '2018');
+insert into offers values(1013, 'P10156', '2017');
+
+--------------------------------- MODE OF TRANSPORT
+create table ModeOfTransport(
+    bookingID int,
+    type varchar(16),
+    
+    primary key (bookingID),
+    foreign key (bookingID) references booking(ID)
+);
+
+insert into modeoftransport values(45819, 'Car');
+insert into modeoftransport values(45831, 'Airplane');
+insert into modeoftransport values(45834, 'Airplane');
+insert into modeoftransport values(45863, 'Car');
+insert into modeoftransport values(45876, 'Car');
+insert into modeoftransport values(45879, 'Airplane');
+insert into modeoftransport values(45891, 'Airplane');
+insert into modeoftransport values(45899, 'Airplane');
+
+
+
+
