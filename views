@@ -1,0 +1,85 @@
+----------TopSalesmen-----------------------
+--returns the First Name, Last Name and Date of Joining of those 
+--salesmen who have made more than 5 bookings in the last month.
+
+SELECT Fname, Lname, DateOfJoining FROM
+Employee,
+    (SELECT SalespersonID, COUNT(SalespersonID) AS NumBookings
+    FROM BOOKING
+    WHERE BookingDate >= add_months(sysdate, -1)
+    GROUP BY SalespersonID
+    ORDER BY NumBookings DESC) SalesAndID
+WHERE NumBookings > 5 AND
+    Employee.EID = SalesAndID.SalespersonID
+
+
+----------TopCustomers-----------------------
+--returns the list of customers who have booked holidays 
+--budgeting over $10,000.
+
+SELECT CustomerID, Expense FROM
+(SELECT CustomerID, SUM(Amount) AS Expense
+FROM Booking
+RIGHT OUTER JOIN
+(SELECT BookingID, PaymentID, Amount
+    FROM PaidBy
+    NATURAL FULL JOIN (SELECT PaymentID, Amount
+        FROM Cash
+        NATURAL FULL JOIN GiftCard)) allpaidbookings
+ON allpaidbookings.bookingid = booking.id
+GROUP BY booking.customerid
+ORDER BY Expense DESC)
+WHERE Expense >= 10000;
+
+
+----------PopularDestination-----------------------
+--returns the name and the expense associated with the most 
+--common visited destination in the past 3 years
+
+SELECT Destination, Expense FROM
+(SELECT Destination, SUM(Amount) AS Expense
+FROM Booking
+RIGHT OUTER JOIN
+(SELECT BookingID, PaymentID, Amount
+    FROM PaidBy
+    NATURAL FULL JOIN (SELECT PaymentID, Amount
+        FROM Cash
+        NATURAL FULL JOIN GiftCard)) allpaidbookings
+ON allpaidbookings.bookingid = booking.id
+GROUP BY booking.destination
+ORDER BY Expense DESC)
+WHERE ROWNUM <= 1;
+
+
+----------PotentialMember-----------------------
+--returns the name, phone number and ID of customers who booked 
+--more than 3 tours in the past year but are not enrolled
+--into any membership
+
+SELECT Fname, Lname, PhoneNumber, Customers.ID AS CID
+FROM Customers
+WHERE Customers.ID IN
+    (SELECT Customers.ID FROM Customers
+    MINUS 
+    SELECT Member.MemberID FROM Member)
+    AND Customers.ID IN
+    (SELECT CustomerID FROM
+        (SELECT CustomerID, COUNT(CustomerID) AS NumBookings
+        FROM Booking
+        WHERE BookingDate >= Add_months(sysdate, -12)
+        GROUP BY CustomerID)
+        WHERE NumBookings > 3);
+
+
+----------PopularPromotion-----------------------
+--returns the promotion details for year with the maximum bookings
+
+SELECT Description 
+FROM Promotion,
+    (SELECT Year, Bookings FROM
+        (SELECT EXTRACT(YEAR FROM bookingdate) AS Year, COUNT(BookingDate) AS Bookings
+        FROM Booking
+        GROUP BY EXTRACT(YEAR FROM bookingdate)
+        ORDER BY Bookings DESC)
+    WHERE ROWNUM <= 1)
+WHERE To_number(promotion.promoyear, '9999') = Year;
