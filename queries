@@ -28,8 +28,8 @@ AND Employee.EID = SID;
 
 
 --Find the most common mode of transport used by customers
-SELECT Type AS MOST_COMMON_TRANSPORT FROM
-  (SELECT Type, COUNT(TYPE) AS MODECOUNT
+SELECT Type AS MOST_COMMON_TRANSPORT 
+FROM (SELECT Type, COUNT(TYPE) AS MODECOUNT
   FROM MODEOFTRANSPORT
   GROUP BY Type
   ORDER BY MODECOUNT DESC)
@@ -60,15 +60,31 @@ WHERE FLOOR(MONTHS_BETWEEN(SYSDATE,DOB)/12) > 65;
 
 
 --Find the salesmen who made a booking within a month of joining
-SELECT Fname, Lname 
-FROM Booking, 
-  (SELECT Fname, Lname, EmployeeID AS EID, DateOfJoining
-    FROM Employee, 
-        (SELECT EMPLOYEEID FROM FloorSalesperson 
-        UNION 
-        SELECT EMPLOYEEID FROM InternetSalesperson) SP
-    WHERE Employee.EID = SP.EMPLOYEEID) Salesperson
-WHERE booking.salespersonid = salesperson.eid
-AND BookingDate BETWEEN DateOfJoining AND Add_months(DateOfJoining, 1);
+
+SELECT Fname, Lname
+FROM Booking B, Employee E
+WHERE B.SalespersonID = E.EID AND
+    B.BookingDate BETWEEN E.DateOfJoining AND Add_months(E.DateOfJoining, 1);
 
 
+--List all the sales that have been made after the most current employee was hired
+SELECT *
+FROM Booking
+WHERE BookingDate > (SELECT MAX(DateOfJoining) FROM Employee);
+
+
+--Find the names of customers who have visited the travel agency but have not made any bookings
+SELECT Fname, Lname
+FROM Customers C
+WHERE NOT EXISTS (SELECT * FROM Booking B
+                    WHERE C.ID = B.CustomerID);
+
+
+--Find the count of bookings made by members in the year having maximum bookings
+SELECT Year, NumBookings FROM
+    (SELECT EXTRACT(YEAR FROM BookingDate) AS Year, COUNT(EXTRACT(YEAR FROM BookingDate)) AS NumBookings
+    FROM Member M, Booking B
+    WHERE M.MemberID = B.CustomerID
+    GROUP BY EXTRACT(YEAR FROM BookingDate)
+    ORDER BY NumBookings, Year DESC)
+WHERE ROWNUM = 1
